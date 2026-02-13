@@ -1,5 +1,7 @@
 # Synthetic Pretraining Tracker
 
+> **Work in progress.** Many models still have incomplete synthetic data counts. Contributions welcome — see [Contributing](#contributing) below.
+
 Tracking synthetic data usage in open-weight LLM pretraining, from Jan 2024 onward.
 
 **Live site**: [eric-tramel.github.io/synthetic-pretraining-tracker](https://eric-tramel.github.io/synthetic-pretraining-tracker/)
