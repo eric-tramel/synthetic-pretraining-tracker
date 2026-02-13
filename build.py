@@ -6,6 +6,7 @@
 
 import json
 import yaml
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -27,8 +28,10 @@ def build():
 
     model_json = json.dumps(models, indent=2, ensure_ascii=False)
     authors_json = json.dumps(authors, indent=2, ensure_ascii=False)
+    build_date = date.today().strftime("%B %d, %Y")
     html = template.replace("%%MODEL_DATA%%", model_json)
     html = html.replace("%%AUTHOR_DATA%%", authors_json)
+    html = html.replace("%%BUILD_DATE%%", build_date)
 
     with open(OUT, "w") as f:
         f.write(html)
