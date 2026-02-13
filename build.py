@@ -80,11 +80,46 @@ Each model entry contains:
 """
     (SITE / "llms.txt").write_text(llms_txt)
 
+    # robots.txt
+    robots_txt = f"""User-agent: *
+Allow: /
+
+Sitemap: {BASE_URL}/sitemap.xml
+"""
+    (SITE / "robots.txt").write_text(robots_txt)
+
+    # sitemap.xml
+    today = date.today().isoformat()
+    sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{BASE_URL}/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{BASE_URL}/data/models.json</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{BASE_URL}/data/models.yaml</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>{BASE_URL}/llms.txt</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+</urlset>
+"""
+    (SITE / "sitemap.xml").write_text(sitemap)
+
     print(f"Built site/ with {len(models)} models, {len(authors)} authors")
-    print(f"  site/index.html")
-    print(f"  site/data/models.yaml")
-    print(f"  site/data/models.json")
-    print(f"  site/llms.txt")
+    for f in sorted(SITE.rglob("*")):
+        if f.is_file():
+            print(f"  {f.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
