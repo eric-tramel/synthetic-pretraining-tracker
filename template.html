@@ -12,12 +12,49 @@
 <meta property="og:title" content="Tracker: Synthetic Data in Pretraining">
 <meta property="og:description" content="Tracking synthetic data usage in open-weight LLM pretraining. Sortable table with cited training token counts and synthetic data proportions for 39+ flagship models (Jan 2024+).">
 <meta property="og:url" content="https://eric-tramel.github.io/synthetic-pretraining-tracker/">
+<meta property="og:image" content="https://eric-tramel.github.io/synthetic-pretraining-tracker/social-card.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Synthetic Pretraining Tracker: table showing training token counts and synthetic data proportions for open-weight LLMs">
 
 <!-- Twitter/X Card -->
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Tracker: Synthetic Data in Pretraining">
 <meta name="twitter:description" content="Cited training token counts and synthetic data proportions for 39+ open-weight LLMs. How much synthetic data goes into pretraining?">
 <meta name="twitter:creator" content="@fujikanaeda">
+<meta name="twitter:image" content="https://eric-tramel.github.io/synthetic-pretraining-tracker/social-card.svg">
+<meta name="twitter:image:alt" content="Synthetic Pretraining Tracker: table showing training token counts and synthetic data proportions for open-weight LLMs">
+
+<!-- JSON-LD Dataset -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Synthetic Pretraining Tracker",
+  "description": "Cited training token counts and synthetic data proportions for open-weight LLMs released since January 2024. Includes model parameters, architecture type, tokens-per-parameter ratios, and direct quotes from technical reports.",
+  "url": "https://eric-tramel.github.io/synthetic-pretraining-tracker/",
+  "license": "https://opensource.org/licenses/MIT",
+  "creator": {
+    "@type": "Person",
+    "name": "Eric W. Tramel",
+    "url": "https://x.com/fujikanaeda"
+  },
+  "keywords": ["synthetic data", "pretraining", "LLM", "open-source", "training tokens", "tokens per parameter", "mixture of experts"],
+  "dateModified": "%%BUILD_DATE_ISO%%",
+  "distribution": [
+    {
+      "@type": "DataDownload",
+      "encodingFormat": "application/json",
+      "contentUrl": "https://eric-tramel.github.io/synthetic-pretraining-tracker/data/models.json"
+    },
+    {
+      "@type": "DataDownload",
+      "encodingFormat": "application/x-yaml",
+      "contentUrl": "https://eric-tramel.github.io/synthetic-pretraining-tracker/data/models.yaml"
+    }
+  ]
+}
+</script>
 <style>
   :root {
     --bg: #0d1117;

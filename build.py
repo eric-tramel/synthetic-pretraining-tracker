@@ -37,14 +37,34 @@ def build():
     (SITE / "data").mkdir()
 
     # Build HTML
-    build_date = date.today().strftime("%B %d, %Y")
+    today = date.today()
+    build_date = today.strftime("%B %d, %Y")
+    build_date_iso = today.isoformat()
     model_json = json.dumps(models, indent=2, ensure_ascii=False)
     authors_json = json.dumps(authors, indent=2, ensure_ascii=False)
     html = template.replace("%%MODEL_DATA%%", model_json)
     html = html.replace("%%AUTHOR_DATA%%", authors_json)
     html = html.replace("%%BUILD_DATE%%", build_date)
+    html = html.replace("%%BUILD_DATE_ISO%%", build_date_iso)
 
     (SITE / "index.html").write_text(html + "\n")
+
+    # Social card (1200x630 SVG rendered as PNG-compatible)
+    n_models = len(models)
+    n_with_synth = sum(1 for m in models if m.get("synth_tokens") is not None)
+    n_with_tokens = sum(1 for m in models if m.get("tokens") is not None)
+    social_svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0d1117"/>
+  <text x="80" y="180" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="52" font-weight="700" fill="#e6edf3">Tracker: Synthetic Data</text>
+  <text x="80" y="245" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="52" font-weight="700" fill="#e6edf3">in Pretraining</text>
+  <text x="80" y="320" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="24" fill="#8b949e">Open-weight LLMs since Jan 2024 — cited token counts &amp; synthetic data proportions</text>
+  <text x="80" y="430" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="36" fill="#58a6ff">{n_models} models</text>
+  <text x="380" y="430" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="36" fill="#3fb950">{n_with_tokens} with token counts</text>
+  <text x="780" y="430" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="36" fill="#d29922">{n_with_synth} with synth data</text>
+  <text x="80" y="560" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="20" fill="#8b949e">eric-tramel.github.io/synthetic-pretraining-tracker</text>
+  <line x1="80" y1="480" x2="1120" y2="480" stroke="#30363d" stroke-width="1"/>
+</svg>'''
+    (SITE / "social-card.svg").write_text(social_svg)
 
     # Data exports
     shutil.copy(MODELS_DATA, SITE / "data" / "models.yaml")
@@ -89,27 +109,26 @@ Sitemap: {BASE_URL}/sitemap.xml
     (SITE / "robots.txt").write_text(robots_txt)
 
     # sitemap.xml
-    today = date.today().isoformat()
     sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{BASE_URL}/</loc>
-    <lastmod>{today}</lastmod>
+    <lastmod>{build_date_iso}</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{BASE_URL}/data/models.json</loc>
-    <lastmod>{today}</lastmod>
+    <lastmod>{build_date_iso}</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{BASE_URL}/data/models.yaml</loc>
-    <lastmod>{today}</lastmod>
+    <lastmod>{build_date_iso}</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>{BASE_URL}/llms.txt</loc>
-    <lastmod>{today}</lastmod>
+    <lastmod>{build_date_iso}</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>
