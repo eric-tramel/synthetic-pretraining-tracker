@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracker: Synthetic Data in Pretraining</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-dim: #388bfd33;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --orange: #db6d28;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 2rem;
+    line-height: 1.5;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .dot-dense { background: var(--accent); }
+  .dot-moe { background: var(--green); }
+  .dot-hybrid { background: var(--orange); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    table-layout: fixed;
+  }
+
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  th {
+    background: var(--surface);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  th:hover { color: var(--text); }
+
+  th.sorted-asc::after { content: ' \25B2'; font-size: 0.6rem; }
+  th.sorted-desc::after { content: ' \25BC'; font-size: 0.6rem; }
+
+  /* Column widths */
+  th:nth-child(1), td:nth-child(1) { width: 14%; }  /* Model */
+  th:nth-child(2), td:nth-child(2) { width: 5%; }   /* Report */
+  th:nth-child(3), td:nth-child(3) { width: 7%; }   /* Org */
+  th:nth-child(4), td:nth-child(4) { width: 7%; }   /* Date */
+  th:nth-child(5), td:nth-child(5) { width: 6%; }   /* Arch */
+  th:nth-child(6), td:nth-child(6) { width: 10%; }  /* Scale */
+  th:nth-child(7), td:nth-child(7) { width: 10%; }  /* Active */
+  th:nth-child(8), td:nth-child(8) { width: 10%; }  /* Tokens */
+  th:nth-child(9), td:nth-child(9) { width: 8%; }   /* TPP */
+  th:nth-child(10), td:nth-child(10) { width: 8%; } /* Synth T */
+  th:nth-child(11), td:nth-child(11) { width: 8%; } /* STPP */
+  th:nth-child(12), td:nth-child(12) { width: 7%; } /* Synth % */
+
+  td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  tr:hover td { background: var(--accent-dim); }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  a:hover { text-decoration: underline; }
+
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .arch-badge {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .arch-dense { background: #388bfd22; color: var(--accent); }
+  .arch-moe { background: #3fb95022; color: var(--green); }
+  .arch-hybrid { background: #db6d2822; color: var(--orange); }
+
+  .tbd {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.75rem;
+  }
+
+  .zero { color: var(--text-muted); }
+
+  .bar-cell {
+    position: relative;
+  }
+
+  .bar-bg {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--green);
+    opacity: 0.15;
+    border-radius: 2px;
+  }
+
+  .report-link {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .report-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+
+  td:has(.cite-wrap) {
+    overflow: visible;
+  }
+
+  .cite-wrap {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted var(--text-muted);
+  }
+
+  .cite-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% - 4px);
+    right: -20px;
+    width: 360px;
+    padding: 0.75rem;
+    padding-bottom: calc(0.75rem + 8px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    z-index: 100;
+    text-align: left;
+    white-space: normal;
+    line-height: 1.5;
+  }
+
+  .cite-wrap:hover .cite-tooltip {
+    display: block;
+  }
+
+  .cite-tooltip a {
+    pointer-events: auto;
+  }
+
+  .cite-tooltip .cite-quote {
+    font-style: italic;
+    color: var(--text);
+    font-size: 0.8rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .cite-tooltip .cite-quote::before { content: '\201C'; color: var(--accent); }
+  .cite-tooltip .cite-quote::after { content: '\201D'; color: var(--accent); }
+
+  .cite-tooltip .cite-source {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  .cite-tooltip .cite-source a {
+    color: var(--accent);
+    font-size: 0.7rem;
+  }
+
+  .footnote {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 1.5rem;
+  }
+
+  .authors {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  .authors a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .authors a:hover {
+    color: var(--accent);
+  }
+
+  .author-entry {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    margin-top: 0.3rem;
+  }
+
+  .author-entry img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<h1>Tracker: Synthetic Data in Pretraining</h1>
+<p class="subtitle">Flagship open-weight models released since Jan 2024. TPP = total training tokens / total params. STPP = synthetic tokens / total params.</p>
+
+
+<div class="legend">
+  <div class="legend-item"><span class="dot dot-dense"></span> Dense</div>
+  <div class="legend-item"><span class="dot dot-moe"></span> MoE</div>
+  <div class="legend-item"><span class="dot dot-hybrid"></span> Hybrid (MoE+Mamba)</div>
+</div>
+
+<table id="model-table">
+<thead>
+<tr>
+  <th data-sort="name">Model</th>
+  <th>Report</th>
+  <th data-sort="org">Org</th>
+  <th data-sort="date">Date</th>
+  <th data-sort="arch">Arch</th>
+  <th data-sort="params" class="num">Total Params</th>
+  <th data-sort="active" class="num">Active Params</th>
+  <th data-sort="tokens" class="num">Train Tokens</th>
+  <th data-sort="tpp" class="num">TPP</th>
+  <th data-sort="synth_tokens" class="num">Synth Tokens</th>
+  <th data-sort="stpp" class="num">STPP</th>
+  <th data-sort="synth_pct" class="num">Synth %</th>
+</tr>
+</thead>
+<tbody id="table-body">
+</tbody>
+</table>
+
+<div class="footer">
+  <div class="footnote">
+    <strong>Notes:</strong><br>
+    TPP = (Total Training Tokens) / (Total Parameters). Higher TPP = more data per parameter of model capacity.<br>
+    STPP = (Synthetic Training Tokens) / (Total Parameters). Measures synthetic data investment normalized by model size.<br>
+    Synth % = Synthetic tokens as fraction of total training tokens.<br>
+    For MoE models, "Active Params" shows params activated per token. TPP/STPP use Total Params as denominator.<br>
+    "TBD" = needs extraction from technical report. Blank = not disclosed or not applicable.<br>
+    DeepSeek-R1 excluded (post-trained from V3, no new pretraining). QwQ excluded (post-trained from Qwen 2.5).
+  </div>
+  <div class="authors" id="authors"></div>
+</div>
+
+<script>
+const models = %%MODEL_DATA%%;
+
+function fmt(n) {
+  if (n === null || n === undefined) return '';
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'T';
+  return n.toFixed(1).replace(/\.0$/, '') + 'B';
+}
+
+function fmtTokens(n) {
+  if (n === null || n === undefined) return '';
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'T';
+  return n + 'B';
+}
+
+function fmtTPP(tokens, params) {
+  if (!tokens || !params) return '';
+  return (tokens / params).toFixed(1);
+}
+
+function fmtPct(synth, total) {
+  if (synth === null || synth === undefined || !total) return '';
+  return (synth / total * 100).toFixed(1) + '%';
+}
+
+function archBadge(arch) {
+  const cls = arch === 'dense' ? 'arch-dense' : arch === 'moe' ? 'arch-moe' : 'arch-hybrid';
+  const label = arch === 'dense' ? 'Dense' : arch === 'moe' ? 'MoE' : 'Hybrid';
+  return `<span class="arch-badge ${cls}">${label}</span>`;
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = '';
+
+  data.forEach(m => {
+    const tpp = (m.tokens && m.params) ? (m.tokens / m.params).toFixed(1) : null;
+    const stpp = (m.synth_tokens !== null && m.synth_tokens !== undefined && m.params) ? (m.synth_tokens / m.params).toFixed(1) : null;
+    const synthPct = (m.synth_tokens !== null && m.synth_tokens !== undefined && m.tokens) ? (m.synth_tokens / m.tokens * 100).toFixed(1) : null;
+
+    const reportLink = m.report
+      ? `<a href="${m.report}" class="report-link" target="_blank">${m.report_label || 'PDF'}</a>`
+      : '<span class="tbd">none</span>';
+
+    const undisclosed = '<span class="tbd">undisclosed</span>';
+
+    // Tokens cell with citation tooltip
+    let tokensCell;
+    if (!m.tokens) {
+      tokensCell = undisclosed;
+    } else if (m.tokens_cite) {
+      const q = m.tokens_cite.quote.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      tokensCell = `<span class="cite-wrap">${fmtTokens(m.tokens)}<div class="cite-tooltip"><div class="cite-quote">${m.tokens_cite.quote}</div><div class="cite-source"><a href="${m.tokens_cite.url}" target="_blank">${m.tokens_cite.source}</a></div></div></span>`;
+    } else {
+      tokensCell = fmtTokens(m.tokens);
+    }
+    const tppCell = m.tokens ? (tpp !== null ? tpp : '') : undisclosed;
+
+    let synthTokensCell;
+    if (!m.tokens) {
+      synthTokensCell = undisclosed;
+    } else if (m.synth_tokens !== null && m.synth_tokens !== undefined && m.synth_cite) {
+      const val = m.synth_tokens === 0 ? '<span class="zero">0</span>' : fmtTokens(m.synth_tokens);
+      synthTokensCell = `<span class="cite-wrap">${val}<div class="cite-tooltip"><div class="cite-quote">${m.synth_cite.quote}</div><div class="cite-source"><a href="${m.synth_cite.url}" target="_blank">${m.synth_cite.source}</a></div></div></span>`;
+    } else if (m.synth_tokens === 0) {
+      synthTokensCell = '<span class="zero">0</span>';
+    } else if (m.synth_tokens !== null && m.synth_tokens !== undefined) {
+      synthTokensCell = fmtTokens(m.synth_tokens);
+    } else {
+      synthTokensCell = '<span class="tbd">TBD</span>';
+    }
+
+    let stppCell;
+    if (!m.tokens) {
+      stppCell = undisclosed;
+    } else if (m.synth_tokens === 0) {
+      stppCell = '<span class="zero">0</span>';
+    } else if (stpp !== null) {
+      stppCell = stpp;
+    } else {
+      stppCell = '<span class="tbd">TBD</span>';
+    }
+
+    let synthPctCell;
+    if (!m.tokens) {
+      synthPctCell = undisclosed;
+    } else if (m.synth_tokens === 0) {
+      synthPctCell = '<span class="zero">0%</span>';
+    } else if (synthPct !== null) {
+      synthPctCell = `<span class="bar-cell">${synthPct}%</span>`;
+    } else {
+      synthPctCell = '<span class="tbd">TBD</span>';
+    }
+
+    // Active params always shows the number
+    const activeCell = fmt(m.active);
+
+    const synthTitle = m.synth_note && !m.synth_cite ? ` title="${m.synth_note.replace(/"/g, '&quot;')}"` : '';
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><a href="${m.url}" target="_blank">${m.name}</a></td>
+      <td>${reportLink}</td>
+      <td>${m.org}</td>
+      <td>${m.date}</td>
+      <td>${archBadge(m.arch)}</td>
+      <td class="num">${fmt(m.params)}</td>
+      <td class="num">${activeCell}</td>
+      <td class="num">${tokensCell}</td>
+      <td class="num">${tppCell}</td>
+      <td class="num"${synthTitle}>${synthTokensCell}</td>
+      <td class="num"${synthTitle}>${stppCell}</td>
+      <td class="num"${synthTitle}>${synthPctCell}</td>
+    `;
+    tbody.appendChild(row);
+  });
+
+}
+
+// Sorting
+let currentSort = { key: 'date', dir: 'asc' };
+
+function getValue(m, key) {
+  if (key === 'tpp') return (m.tokens && m.params) ? m.tokens / m.params : null;
+  if (key === 'stpp') return (m.synth_tokens != null && m.params) ? m.synth_tokens / m.params : null;
+  if (key === 'synth_pct') return (m.synth_tokens != null && m.tokens) ? m.synth_tokens / m.tokens : null;
+  return m[key];
+}
+
+function sortData(data, key, dir) {
+  return [...data].sort((a, b) => {
+    let va = getValue(a, key), vb = getValue(b, key);
+    // Handle nulls — push to end
+    if (va === null || va === undefined) return 1;
+    if (vb === null || vb === undefined) return -1;
+    if (typeof va === 'string') {
+      va = va.toLowerCase();
+      vb = vb.toLowerCase();
+    }
+    if (va < vb) return dir === 'asc' ? -1 : 1;
+    if (va > vb) return dir === 'asc' ? 1 : -1;
+    return 0;
+  });
+}
+
+document.querySelectorAll('th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.sort;
+    let dir = 'asc';
+    if (currentSort.key === key && currentSort.dir === 'asc') dir = 'desc';
+    currentSort = { key, dir };
+
+    document.querySelectorAll('th').forEach(h => h.classList.remove('sorted-asc', 'sorted-desc'));
+    th.classList.add(dir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+
+    renderTable(sortData(models, key, dir));
+  });
+});
+
+// Initial render sorted by date
+renderTable(sortData(models, 'date', 'asc'));
+
+// Authors
+const authors = %%AUTHOR_DATA%%;
+document.getElementById('authors').innerHTML = '<strong>Authors</strong>' + authors.map(a =>
+  `<div class="author-entry"><img src="https://unavatar.io/x/${a.x}" alt="${a.name}">${a.name} (<a href="https://x.com/${a.x}" target="_blank">@${a.x}</a>)</div>`
+).join('');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,707 @@
+# Open-Source LLM Synthetic Data Proportions — Model Data
+# Each entry: name, url, report, report_label, org, date, arch, params, active, tokens, tokens_cite, synth_tokens, synth_cite, synth_note
+
+- name: "Llama 3.1 405B"
+  url: "https://huggingface.co/meta-llama/Llama-3.1-405B"
+  report: "https://arxiv.org/pdf/2407.21783"
+  report_label: null
+  org: "Meta"
+  date: "2024-07"
+  arch: "dense"
+  params: 405
+  active: 405
+  tokens: 15600
+  tokens_cite:
+    quote: "We pre-trained a flagship model with 405B trainable parameters on 15.6T text tokens."
+    source: "arXiv 2407.21783, \xA71 Introduction"
+    url: "https://arxiv.org/abs/2407.21783"
+  synth_tokens: 0
+  synth_cite:
+    quote: "We found that annealing on small amounts of high-quality code and mathematical data...can boost the performance. We do not use any synthetic data produced by other LLMs for pretraining."
+    source: "arXiv 2407.21783, \xA73.1.3 Annealing Data"
+    url: "https://arxiv.org/abs/2407.21783"
+  synth_note: "Explicitly no synthetic pretraining data"
+
+- name: "Llama 4 Scout"
+  url: "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct"
+  report: "https://ai.meta.com/blog/llama-4-multimodal-intelligence/"
+  report_label: "blog"
+  org: "Meta"
+  date: "2025-04"
+  arch: "moe"
+  params: 109
+  active: 17
+  tokens: 40000
+  tokens_cite:
+    quote: "Pre-training data: ~40T tokens"
+    source: "Llama 4 Scout HF Model Card"
+    url: "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD — multimodal training, synthetic proportion unknown"
+
+- name: "Llama 4 Maverick"
+  url: "https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct"
+  report: "https://ai.meta.com/blog/llama-4-multimodal-intelligence/"
+  report_label: "blog"
+  org: "Meta"
+  date: "2025-04"
+  arch: "moe"
+  params: 400
+  active: 17
+  tokens: 22000
+  tokens_cite:
+    quote: "Pre-training data: ~22T tokens"
+    source: "Llama 4 Maverick HF Model Card"
+    url: "https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD"
+
+- name: "DeepSeek-V2"
+  url: "https://huggingface.co/deepseek-ai/DeepSeek-V2"
+  report: "https://arxiv.org/pdf/2405.04434"
+  report_label: null
+  org: "DeepSeek"
+  date: "2024-05"
+  arch: "moe"
+  params: 236
+  active: 21
+  tokens: 8100
+  tokens_cite:
+    quote: "We pretrain DeepSeek-V2 on a high-quality and multi-source corpus consisting of 8.1T tokens."
+    source: "arXiv 2405.04434, Abstract"
+    url: "https://arxiv.org/abs/2405.04434"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Not addressed in tech report — pretraining section describes web data recovery, Chinese data proportion, quality filtering, but does not confirm or deny synthetic data use"
+
+- name: "DeepSeek-V3"
+  url: "https://huggingface.co/deepseek-ai/DeepSeek-V3"
+  report: "https://arxiv.org/pdf/2412.19437"
+  report_label: null
+  org: "DeepSeek"
+  date: "2024-12"
+  arch: "moe"
+  params: 671
+  active: 37
+  tokens: 14800
+  tokens_cite:
+    quote: "We pre-train DeepSeek-V3 on 14.8 trillion diverse and high-quality tokens."
+    source: "arXiv 2412.19437, Abstract"
+    url: "https://arxiv.org/abs/2412.19437"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Not addressed in tech report — describes enhanced math/code ratio and multilingual coverage, but does not confirm or deny synthetic data use"
+
+- name: "Qwen 2.5 72B"
+  url: "https://huggingface.co/Qwen/Qwen2.5-72B"
+  report: "https://arxiv.org/pdf/2412.15115"
+  report_label: null
+  org: "Alibaba"
+  date: "2024-09"
+  arch: "dense"
+  params: 72
+  active: 72
+  tokens: 18000
+  tokens_cite:
+    quote: "All models are pretrained on our latest large-scale dataset, encompassing up to 18 trillion tokens."
+    source: "arXiv 2412.15115"
+    url: "https://arxiv.org/abs/2412.15115"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Qwen 3 report says Qwen 2.5 models used to 'synthesize trillions of tokens' but Qwen 2.5's own report doesn't quantify synthetic proportion"
+
+- name: "Qwen 3 0.6B"
+  url: "https://huggingface.co/Qwen/Qwen3-0.6B"
+  report: "https://arxiv.org/pdf/2505.09388"
+  report_label: null
+  org: "Alibaba"
+  date: "2025-05"
+  arch: "dense"
+  params: 0.6
+  active: 0.6
+  tokens: 36000
+  tokens_cite:
+    quote: "All Qwen3 models are trained on a large and diverse dataset consisting of 119 languages and dialects, with a total of 36 trillion tokens."
+    source: "arXiv 2505.09388, \xA73.1"
+    url: "https://arxiv.org/abs/2505.09388"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Report states 'trillions of text tokens' synthesized via Qwen2.5/Math/Coder as textbooks, QA, instructions, code snippets. Exact count not stated. (arXiv 2505.09388 \xA73.1)"
+
+- name: "Qwen 3 7B"
+  url: "https://huggingface.co/Qwen/Qwen3-7B"
+  report: "https://arxiv.org/pdf/2505.09388"
+  report_label: null
+  org: "Alibaba"
+  date: "2025-05"
+  arch: "dense"
+  params: 7
+  active: 7
+  tokens: 36000
+  tokens_cite:
+    quote: "All Qwen3 models are trained on a large and diverse dataset consisting of 119 languages and dialects, with a total of 36 trillion tokens."
+    source: "arXiv 2505.09388, \xA73.1"
+    url: "https://arxiv.org/abs/2505.09388"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Report states 'trillions of text tokens' synthesized via Qwen2.5/Math/Coder as textbooks, QA, instructions, code snippets. Exact count not stated. (arXiv 2505.09388 \xA73.1)"
+
+- name: "Qwen 3 14B"
+  url: "https://huggingface.co/Qwen/Qwen3-14B"
+  report: "https://arxiv.org/pdf/2505.09388"
+  report_label: null
+  org: "Alibaba"
+  date: "2025-05"
+  arch: "dense"
+  params: 14
+  active: 14
+  tokens: 36000
+  tokens_cite:
+    quote: "All Qwen3 models are trained on a large and diverse dataset consisting of 119 languages and dialects, with a total of 36 trillion tokens."
+    source: "arXiv 2505.09388, \xA73.1"
+    url: "https://arxiv.org/abs/2505.09388"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Report states 'trillions of text tokens' synthesized via Qwen2.5/Math/Coder as textbooks, QA, instructions, code snippets. Exact count not stated. (arXiv 2505.09388 \xA73.1)"
+
+- name: "Qwen 3 32B"
+  url: "https://huggingface.co/Qwen/Qwen3-32B"
+  report: "https://arxiv.org/pdf/2505.09388"
+  report_label: null
+  org: "Alibaba"
+  date: "2025-05"
+  arch: "dense"
+  params: 32
+  active: 32
+  tokens: 36000
+  tokens_cite:
+    quote: "All Qwen3 models are trained on a large and diverse dataset consisting of 119 languages and dialects, with a total of 36 trillion tokens."
+    source: "arXiv 2505.09388, \xA73.1"
+    url: "https://arxiv.org/abs/2505.09388"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Report states 'trillions of text tokens' synthesized via Qwen2.5/Math/Coder as textbooks, QA, instructions, code snippets. Exact count not stated. (arXiv 2505.09388 \xA73.1)"
+
+- name: "Qwen 3 30B-A3B"
+  url: "https://huggingface.co/Qwen/Qwen3-30B-A3B"
+  report: "https://arxiv.org/pdf/2505.09388"
+  report_label: null
+  org: "Alibaba"
+  date: "2025-05"
+  arch: "moe"
+  params: 30
+  active: 3
+  tokens: 36000
+  tokens_cite:
+    quote: "All Qwen3 models are trained on a large and diverse dataset consisting of 119 languages and dialects, with a total of 36 trillion tokens."
+    source: "arXiv 2505.09388, \xA73.1"
+    url: "https://arxiv.org/abs/2505.09388"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Report states 'trillions of text tokens' synthesized via Qwen2.5/Math/Coder as textbooks, QA, instructions, code snippets. Exact count not stated. (arXiv 2505.09388 \xA73.1)"
+
+- name: "Qwen 3 235B-A22B"
+  url: "https://huggingface.co/Qwen/Qwen3-235B-A22B"
+  report: "https://arxiv.org/pdf/2505.09388"
+  report_label: null
+  org: "Alibaba"
+  date: "2025-05"
+  arch: "moe"
+  params: 235
+  active: 22
+  tokens: 36000
+  tokens_cite:
+    quote: "All Qwen3 models are trained on a large and diverse dataset consisting of 119 languages and dialects, with a total of 36 trillion tokens."
+    source: "arXiv 2505.09388, \xA73.1"
+    url: "https://arxiv.org/abs/2505.09388"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Report states 'trillions of text tokens' synthesized via Qwen2.5/Math/Coder as textbooks, QA, instructions, code snippets. Exact count not stated. (arXiv 2505.09388 \xA73.1)"
+
+- name: "Gemma 2 27B"
+  url: "https://huggingface.co/google/gemma-2-27b"
+  report: "https://arxiv.org/pdf/2408.00118"
+  report_label: null
+  org: "Google"
+  date: "2024-06"
+  arch: "dense"
+  params: 27
+  active: 27
+  tokens: 13000
+  tokens_cite:
+    quote: "We train Gemma 2 27B on 13 trillion tokens of primarily-English data, the 9B model on 8 trillion tokens, and the 2B on 2 trillion tokens."
+    source: "arXiv 2408.00118, \xA73.1 Training Data"
+    url: "https://arxiv.org/abs/2408.00118"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD — 9B variant uses knowledge distillation"
+
+- name: "Gemma 3 27B"
+  url: "https://huggingface.co/google/gemma-3-27b-pt"
+  report: "https://arxiv.org/pdf/2503.19786"
+  report_label: null
+  org: "Google"
+  date: "2025-03"
+  arch: "dense"
+  params: 27
+  active: 27
+  tokens: 14000
+  tokens_cite:
+    quote: "We pre-train our models on a slightly larger token budget than Gemma 2, i.e., we train on 14T tokens for Gemma 3 27B, 12T for the 12B version, 4T for the 4B, and 2T tokens for the 1B."
+    source: "arXiv 2503.19786, \xA72.2 Pre-training"
+    url: "https://arxiv.org/abs/2503.19786"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD"
+
+- name: "Phi-3 medium 14B"
+  url: "https://huggingface.co/microsoft/Phi-3-medium-128k-instruct"
+  report: "https://arxiv.org/pdf/2404.14219"
+  report_label: null
+  org: "Microsoft"
+  date: "2024-04"
+  arch: "dense"
+  params: 14
+  active: 14
+  tokens: 4800
+  tokens_cite:
+    quote: "We also provide some initial parameter-scaling results with a 7B and 14B models trained for 4.8T tokens, called phi-3-small and phi-3-medium."
+    source: "arXiv 2404.14219, Abstract"
+    url: "https://arxiv.org/abs/2404.14219"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Report says 'heavily filtered web data...as well as synthetic LLM-generated data' in two phases. Exact synthetic proportion not disclosed. (arXiv 2404.14219 \xA72)"
+
+- name: "Phi-4 14B"
+  url: "https://huggingface.co/microsoft/phi-4"
+  report: "https://arxiv.org/pdf/2412.08905"
+  report_label: null
+  org: "Microsoft"
+  date: "2024-12"
+  arch: "dense"
+  params: 14
+  active: 14
+  tokens: 10000
+  tokens_cite:
+    quote: "The model was pretrained for approximately 10T tokens using linear warm-up and decay schedules."
+    source: "arXiv 2412.08905, \xA73 Pretraining"
+    url: "https://arxiv.org/abs/2412.08905"
+  synth_tokens: 5500
+  synth_cite:
+    quote: "Synthetic data constitutes the bulk of the training data for phi-4. Data mixture: Synthetic 40%, Web rewrites 15%, Filtered web data 15%, Code data 20%, Acquired sources 10%."
+    source: "arXiv 2412.08905, \xA73 Table 5"
+    url: "https://arxiv.org/abs/2412.08905"
+  synth_note: "40% synthetic + 15% web rewrites = 55% of 10T = 5.5T"
+
+- name: "Mixtral 8x22B"
+  url: "https://huggingface.co/mistralai/Mixtral-8x22B-v0.1"
+  report: null
+  report_label: null
+  org: "Mistral"
+  date: "2024-04"
+  arch: "moe"
+  params: 141
+  active: 39
+  tokens: null
+  tokens_cite: null
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "No public tech report"
+
+- name: "Mistral Large 2"
+  url: "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407"
+  report: null
+  report_label: null
+  org: "Mistral"
+  date: "2024-07"
+  arch: "dense"
+  params: 123
+  active: 123
+  tokens: null
+  tokens_cite: null
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "No public tech report"
+
+- name: "DBRX"
+  url: "https://huggingface.co/databricks/dbrx-instruct"
+  report: "https://www.databricks.com/blog/introducing-dbrx-new-state-art-open-llm"
+  report_label: "blog"
+  org: "Databricks"
+  date: "2024-03"
+  arch: "moe"
+  params: 132
+  active: 36
+  tokens: 12000
+  tokens_cite:
+    quote: "It was pre-trained on 12T tokens of text and code data."
+    source: "Databricks Blog: Introducing DBRX"
+    url: "https://www.databricks.com/blog/introducing-dbrx-new-state-art-open-llm"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD"
+
+- name: "Snowflake Arctic"
+  url: "https://huggingface.co/Snowflake/snowflake-arctic-instruct"
+  report: "https://www.snowflake.com/en/blog/arctic-open-efficient-foundation-language-models-snowflake/"
+  report_label: "blog"
+  org: "Snowflake"
+  date: "2024-04"
+  arch: "moe"
+  params: 480
+  active: 17
+  tokens: 3500
+  tokens_cite:
+    quote: "Snowflake Arctic was pretrained on 3.5 trillion tokens of data from publicly available sources."
+    source: "Snowflake Blog"
+    url: "https://www.snowflake.com/en/blog/arctic-open-efficient-foundation-language-models-snowflake/"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD"
+
+- name: "OLMo 2 32B"
+  url: "https://huggingface.co/allenai/OLMo-2-0325-32B"
+  report: "https://allenai.org/blog/olmo2-32B"
+  report_label: "blog"
+  org: "Allen AI"
+  date: "2025-02"
+  arch: "dense"
+  params: 32
+  active: 32
+  tokens: 6000
+  tokens_cite:
+    quote: "OLMo 2 32B is trained for 1.5 epochs, up to 6T tokens."
+    source: "Ai2 Blog: OLMo 2 32B"
+    url: "https://allenai.org/blog/olmo2-32B"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD — fully open data pipeline"
+
+- name: "OLMo 3 32B"
+  url: "https://huggingface.co/allenai/Olmo-3-1125-32B"
+  report: "https://allenai.org/blog/olmo3"
+  report_label: "blog"
+  org: "Allen AI"
+  date: "2025-11"
+  arch: "dense"
+  params: 32
+  active: 32
+  tokens: 6000
+  tokens_cite:
+    quote: "Dolma 3 Mix, a 5.9-trillion-token (~6T) pretraining mix."
+    source: "Ai2 Blog: OLMo 3"
+    url: "https://allenai.org/blog/olmo3"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD — Dolma 3 corpus"
+
+- name: "Granite 3.0 8B"
+  url: "https://huggingface.co/ibm-granite/granite-3.0-8b-base"
+  report: "https://github.com/ibm-granite/granite-3.0-language-models"
+  report_label: "paper"
+  org: "IBM"
+  date: "2024-10"
+  arch: "dense"
+  params: 8
+  active: 8
+  tokens: 12000
+  tokens_cite:
+    quote: "Trained from scratch following a two-stage training strategy. In the first stage, it is trained on 10 trillion tokens sourced from diverse domains. During the second stage, it is further trained on 2 trillion tokens."
+    source: "Granite 3.0 8B HF Model Card"
+    url: "https://huggingface.co/ibm-granite/granite-3.0-8b-base"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD"
+
+- name: "Kimi K2"
+  url: "https://huggingface.co/moonshotai/Kimi-K2-Instruct"
+  report: "https://arxiv.org/pdf/2507.20534"
+  report_label: null
+  org: "Moonshot"
+  date: "2025-07"
+  arch: "moe"
+  params: 1040
+  active: 32
+  tokens: 15500
+  tokens_cite:
+    quote: "The Kimi K2 pre-training corpus comprises 15.5 trillion tokens of curated, high-quality data spanning four primary domains: Web Text, Code, Mathematics, and Knowledge."
+    source: "arXiv 2507.20534, \xA72.2.3"
+    url: "https://arxiv.org/abs/2507.20534"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD — known to use rephrasing"
+
+- name: "MiniMax-01"
+  url: "https://huggingface.co/MiniMaxAI/MiniMax-Text-01"
+  report: "https://arxiv.org/pdf/2501.08313"
+  report_label: null
+  org: "MiniMax"
+  date: "2025-01"
+  arch: "moe"
+  params: 456
+  active: 45.9
+  tokens: 12000
+  tokens_cite:
+    quote: "Trained on ~12 trillion tokens."
+    source: "AnalyticsVidhya (citing arXiv 2501.08313)"
+    url: "https://arxiv.org/abs/2501.08313"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "~12T tokens per secondary sources. 4x repetition of high-quality data mentioned but synthetic proportion not disclosed."
+
+- name: "Kimi K2.5"
+  url: "https://huggingface.co/moonshotai/Kimi-K2.5"
+  report: "https://www.kimi.com/blog/kimi-k2-5.html"
+  report_label: "blog"
+  org: "Moonshot"
+  date: "2026-01"
+  arch: "moe"
+  params: 1040
+  active: 32
+  tokens: 30500
+  tokens_cite:
+    quote: "Built through continual pretraining on approximately 15 trillion mixed visual and text tokens atop Kimi-K2-Base."
+    source: "Kimi K2.5 Tech Blog + K2 report (15.5T base + 15T CPT)"
+    url: "https://www.kimi.com/blog/kimi-k2-5.html"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Inherits K2 base (15.5T, rephrasing used). K2.5 adds 15T multimodal CPT — synthetic proportion not stated."
+
+- name: "GLM-5"
+  url: "https://huggingface.co/zai-org/GLM-5"
+  report: "https://huggingface.co/zai-org/GLM-5"
+  report_label: "HF"
+  org: "Zhipu AI"
+  date: "2026-02"
+  arch: "moe"
+  params: 744
+  active: 40
+  tokens: 28500
+  tokens_cite:
+    quote: "Pre-training data growing from 23T to 28.5T tokens. GLM-5 employs a MoE architecture, scaling from GLM-4.5's 355B params to 744B, with 256 experts, 8 activated per token."
+    source: "GLM-5 release coverage (Feb 2026)"
+    url: "https://huggingface.co/zai-org/GLM-5"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Inherits GLM-4.5 synthetic reasoning approach. Trained on Huawei Ascend chips. Synthetic proportion not stated."
+
+- name: "GLM-4.5"
+  url: "https://huggingface.co/zai-org/GLM-4.5"
+  report: "https://arxiv.org/pdf/2508.06471"
+  report_label: null
+  org: "Zhipu AI"
+  date: "2025-07"
+  arch: "moe"
+  params: 355
+  active: 32
+  tokens: 23000
+  tokens_cite:
+    quote: "Multi-stage training on 23T tokens."
+    source: "arXiv 2508.06471"
+    url: "https://arxiv.org/abs/2508.06471"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "23T total (~15T general web/books + ~7T code/reasoning). Synthetic reasoning data in mid-training stage for math/science/coding. Exact synthetic count not stated. (arXiv 2508.06471)"
+
+- name: "Trinity Nano"
+  url: "https://huggingface.co/arcee-ai/Trinity-Nano-Preview"
+  report: "https://www.arcee.ai/blog/the-trinity-manifesto"
+  report_label: "blog"
+  org: "Arcee"
+  date: "2025-12"
+  arch: "moe"
+  params: 6
+  active: 1
+  tokens: 10000
+  tokens_cite:
+    quote: "Trained on 10T tokens, organized into three phases with progressively higher quality and STEM concentration: 7T in phase 1, 1.8T in phase 2, 1.2T in phase 3."
+    source: "Arcee Blog: The Trinity Manifesto"
+    url: "https://www.arcee.ai/blog/the-trinity-manifesto"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Dataset pool is 20T (10T synthetic + 10T web via DatologyAI). Per-model synthetic proportion in the 10T training mix not disclosed."
+
+- name: "Trinity Mini"
+  url: "https://huggingface.co/arcee-ai/Trinity-Mini"
+  report: "https://www.arcee.ai/blog/the-trinity-manifesto"
+  report_label: "blog"
+  org: "Arcee"
+  date: "2025-12"
+  arch: "moe"
+  params: 26
+  active: 3
+  tokens: 10000
+  tokens_cite:
+    quote: "Trained on 10T tokens, organized into three phases with progressively higher quality and STEM concentration: 7T in phase 1, 1.8T in phase 2, 1.2T in phase 3."
+    source: "Arcee Blog: The Trinity Manifesto"
+    url: "https://www.arcee.ai/blog/the-trinity-manifesto"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Dataset pool is 20T (10T synthetic + 10T web via DatologyAI). Per-model synthetic proportion in the 10T training mix not disclosed."
+
+- name: "Trinity Large"
+  url: "https://huggingface.co/arcee-ai/Trinity-Large-Base"
+  report: "https://github.com/arcee-ai/trinity-large-tech-report"
+  report_label: "paper"
+  org: "Arcee"
+  date: "2025-11"
+  arch: "moe"
+  params: 400
+  active: 13
+  tokens: 17000
+  tokens_cite:
+    quote: "Trinity Large was pre-trained on 17 trillion tokens of data curated by DatologyAI, split across three phases of 10T, 4T, and 3T tokens."
+    source: "Arcee Blog: Trinity Large"
+    url: "https://www.arcee.ai/blog/trinity-large"
+  synth_tokens: 8000
+  synth_cite:
+    quote: "Over 8 trillion tokens of synthetic data were generated for this dataset across web, code, math, reasoning, and multilingual domains. The 8T synthetic tokens include 6.5T synthetic web tokens, 1T multilingual tokens, and 800B synthetic code tokens."
+    source: "Arcee Blog: Trinity Large"
+    url: "https://www.arcee.ai/blog/trinity-large"
+  synth_note: "6.5T web rephrasing + 1T multilingual + 0.8T code"
+
+- name: "Grok-1"
+  url: "https://huggingface.co/xai-org/grok-1"
+  report: "https://github.com/xai-org/grok-1"
+  report_label: "github"
+  org: "xAI"
+  date: "2024-03"
+  arch: "moe"
+  params: 314
+  active: 79
+  tokens: null
+  tokens_cite: null
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Weights only, no training details"
+
+- name: "Falcon 3 10B"
+  url: "https://huggingface.co/tiiuae/Falcon3-10B-Base"
+  report: "https://huggingface.co/blog/falcon3"
+  report_label: "blog"
+  org: "TII"
+  date: "2024-12"
+  arch: "dense"
+  params: 10
+  active: 10
+  tokens: 16000
+  tokens_cite:
+    quote: "We conducted a single large-scale pretraining run on the 7B model...leveraging 14 trillion tokens featuring web, code, STEM, and curated high-quality and multilingual data. [Then] upscaled the 7B model to a 10B parameters model...continuing pre-training with 2 trillion tokens."
+    source: "HF Blog: Falcon 3"
+    url: "https://huggingface.co/blog/falcon3"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "14T base pretrain (7B) + 2T continued pretrain (depth upscaling to 10B). Web, code, STEM, multilingual. Synthetic proportion not stated."
+
+- name: "Yi-1.5 34B"
+  url: "https://huggingface.co/01-ai/Yi-1.5-34B"
+  report: "https://arxiv.org/pdf/2403.04652"
+  report_label: null
+  org: "01.AI"
+  date: "2024-05"
+  arch: "dense"
+  params: 34
+  active: 34
+  tokens: 3100
+  tokens_cite:
+    quote: "We construct 3.1 trillion tokens of English and Chinese corpora using a cascaded data deduplication and quality filtering pipeline."
+    source: "arXiv 2403.04652"
+    url: "https://arxiv.org/abs/2403.04652"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "TBD"
+
+- name: "Jamba 1.5 Large"
+  url: "https://huggingface.co/ai21labs/AI21-Jamba-Large-1.5"
+  report: "https://www.ai21.com/research/jamba-1-5-hybrid-transformer-mamba-models-at-scale/"
+  report_label: "paper"
+  org: "AI21"
+  date: "2024-08"
+  arch: "hybrid"
+  params: 398
+  active: 94
+  tokens: null
+  tokens_cite: null
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Training tokens not publicly disclosed"
+
+- name: "Command-R+"
+  url: "https://huggingface.co/CohereLabs/c4ai-command-r-plus-08-2024"
+  report: null
+  report_label: null
+  org: "Cohere"
+  date: "2024-04"
+  arch: "dense"
+  params: 104
+  active: 104
+  tokens: null
+  tokens_cite: null
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "No public tech report"
+
+- name: "Nemotron-3 Nano"
+  url: "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
+  report: "https://research.nvidia.com/labs/nemotron/files/NVIDIA-Nemotron-3-Nano-Technical-Report.pdf"
+  report_label: null
+  org: "NVIDIA"
+  date: "2025-12"
+  arch: "hybrid"
+  params: 30
+  active: 3.5
+  tokens: 25000
+  tokens_cite:
+    quote: "Nemotron 3 Nano was pretrained on 25 trillion text tokens, including more than 3 trillion new unique tokens over Nemotron 2."
+    source: "arXiv 2512.20848"
+    url: "https://arxiv.org/abs/2512.20848"
+  synth_tokens: 2500
+  synth_cite:
+    quote: "They curated or generated over 2.5T new tokens from Common Crawl data. Applied five prompts to Medium-High-Quality data from 110 Common Crawl snapshots, resulting in 2.1T new tokens. For all synthetic rephrasing, they used Qwen3-30B-A3B."
+    source: "arXiv 2512.20848, \xA7Data Curation"
+    url: "https://arxiv.org/abs/2512.20848"
+  synth_note: "2.1T CC rephrasing + synthetic code, Wikipedia, STEM QA, math textbooks"
+
+- name: "Monad"
+  url: "https://huggingface.co/PleIAs/Monad"
+  report: "https://huggingface.co/blog/Pclanglais/synth-data-frontier"
+  report_label: "blog"
+  org: "Pleias"
+  date: "2025-11"
+  arch: "dense"
+  params: 0.056
+  active: 0.056
+  tokens: 200
+  tokens_cite:
+    quote: "Monad is a 56 million parameters generalist Small Reasoning Model, trained on 200 billions tokens from SYNTH, a fully open generalist dataset."
+    source: "Monad HF Model Card"
+    url: "https://huggingface.co/PleIAs/Monad"
+  synth_tokens: 200
+  synth_cite:
+    quote: "Full synthetic training makes relatively straightforward to expand language support. Trained exclusively on SYNTH, a fully open generalist synthetic dataset built from 50,000 Wikipedia vital articles as seeds."
+    source: "SYNTH Blog: The New Data Frontier"
+    url: "https://huggingface.co/blog/Pclanglais/synth-data-frontier"
+  synth_note: "100% synthetic — trained exclusively on SYNTH dataset (encyclopedic amplification, reasoning traces, arithmetic, RAG, creative writing)"
+
+- name: "Baguettotron"
+  url: "https://huggingface.co/PleIAs/Baguettotron"
+  report: "https://huggingface.co/blog/Pclanglais/synth-data-frontier"
+  report_label: "blog"
+  org: "Pleias"
+  date: "2025-11"
+  arch: "dense"
+  params: 0.321
+  active: 0.321
+  tokens: 200
+  tokens_cite:
+    quote: "Baguettotron is a 321 million parameters generalist Small Reasoning Model, trained on 200 billions tokens from SYNTH, a fully open generalist dataset."
+    source: "Baguettotron HF Model Card"
+    url: "https://huggingface.co/PleIAs/Baguettotron"
+  synth_tokens: 200
+  synth_cite:
+    quote: "Full synthetic training makes relatively straightforward to expand language support. Trained exclusively on SYNTH, a fully open generalist synthetic dataset built from 50,000 Wikipedia vital articles as seeds."
+    source: "SYNTH Blog: The New Data Frontier"
+    url: "https://huggingface.co/blog/Pclanglais/synth-data-frontier"
+  synth_note: "100% synthetic — trained exclusively on SYNTH dataset (encyclopedic amplification, reasoning traces, arithmetic, RAG, creative writing)"
