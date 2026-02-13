@@ -29,10 +29,16 @@
     line-height: 1.5;
   }
 
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.25rem;
+  }
+
   h1 {
     font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 0.25rem;
   }
 
   .subtitle {
@@ -49,9 +55,8 @@
 
   .contribute {
     color: var(--text-muted);
-    font-size: 0.75rem;
-    margin-top: -1rem;
-    margin-bottom: 1.25rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
   }
 
   .contribute a {
@@ -330,10 +335,12 @@
 </head>
 <body>
 
-<h1>Tracker: Synthetic Data in Pretraining</h1>
+<div class="header-row">
+  <h1>Tracker: Synthetic Data in Pretraining</h1>
+  <p class="contribute">See an issue or want to add a model? <a href="https://github.com/eric-tramel/synthetic-pretraining-tracker" target="_blank" rel="noopener noreferrer">Contribute on GitHub</a></p>
+</div>
 <p class="subtitle">Flagship open-weight models released since Jan 2024. TPP = total training tokens / total params. STPP = synthetic tokens / total params.</p>
 <p class="last-updated"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4.75 0a.75.75 0 0 1 .75.75V2h5V.75a.75.75 0 0 1 1.5 0V2H13.25A1.75 1.75 0 0 1 15 3.75v10.5A1.75 1.75 0 0 1 13.25 16H2.75A1.75 1.75 0 0 1 1 14.25V3.75A1.75 1.75 0 0 1 2.75 2H4V.75A.75.75 0 0 1 4.75 0ZM2.5 7v7.25c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25V7Z"/></svg>Last updated: %%BUILD_DATE%%</p>
-<p class="contribute">See an issue or want to add a model? <a href="https://github.com/open-thought/synthetic-pretraining-tracker" target="_blank" rel="noopener noreferrer">Contribute on GitHub</a>.</p>
 
 
 <div class="legend">
