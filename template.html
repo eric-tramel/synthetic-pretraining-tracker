@@ -424,6 +424,7 @@
 </tr>
 </thead>
 <tbody id="table-body">
+%%TABLE_ROWS%%
 </tbody>
 </table>
 </div>
@@ -600,8 +601,8 @@ document.querySelectorAll('th[data-sort]').forEach(th => {
   });
 });
 
-// Initial render sorted by date
-renderTable(sortData(models, 'date', 'asc'));
+// Initial render is static HTML from build.py (sorted by date asc).
+// JS renderTable() activates only when a user clicks a sort header.
 
 // Authors
 const authors = %%AUTHOR_DATA%%;

@@ -8,6 +8,7 @@ import json
 import shutil
 import yaml
 from datetime import date
+from html import escape
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -18,6 +19,187 @@ SITE = ROOT / "site"
 
 BASE_URL = "https://eric-tramel.github.io/synthetic-pretraining-tracker"
 REPO_URL = "https://github.com/eric-tramel/synthetic-pretraining-tracker"
+
+
+def fmt(n):
+    """Format params/active as B/T. Matches JS fmt()."""
+    if n is None:
+        return ""
+    if n >= 1000:
+        v = f"{n / 1000:.1f}".removesuffix(".0")
+        return v + "T"
+    v = f"{n:.1f}".removesuffix(".0")
+    return v + "B"
+
+
+def fmt_tokens(n):
+    """Format token counts. Matches JS fmtTokens() — no decimal for <1000."""
+    if n is None:
+        return ""
+    if n >= 1000:
+        v = f"{n / 1000:.1f}".removesuffix(".0")
+        return v + "T"
+    # JS: n + 'B' (no toFixed)
+    # n could be int or float from YAML; match JS Number coercion
+    if isinstance(n, float) and n == int(n):
+        return f"{int(n)}B"
+    return f"{n}B"
+
+
+def arch_badge(arch):
+    """Render architecture badge. Matches JS archBadge()."""
+    if arch == "dense":
+        cls, label = "arch-dense", "Dense"
+    elif arch == "moe":
+        cls, label = "arch-moe", "MoE"
+    else:
+        cls, label = "arch-hybrid", "Hybrid"
+    return f'<span class="arch-badge {cls}">{label}</span>'
+
+
+def _cite_tooltip(cite):
+    """Build a cite-wrap span with tooltip. Used for tokens and synth_tokens."""
+    quote_html = escape(cite["quote"])
+    source_html = escape(cite["source"])
+    url = escape(cite["url"], quote=True)
+    return (
+        f'<div class="cite-tooltip">'
+        f'<div class="cite-quote">{quote_html}</div>'
+        f'<div class="cite-source">'
+        f'<a href="{url}" target="_blank">{source_html}</a>'
+        f"</div></div>"
+    )
+
+
+def render_row(m):
+    """Render a single <tr> for model m. Matches JS renderTable() row logic."""
+    undisclosed = '<span class="tbd">undisclosed</span>'
+
+    tokens = m.get("tokens")
+    params = m.get("params")
+    active = m.get("active")
+    synth_tokens = m.get("synth_tokens")
+    tokens_cite = m.get("tokens_cite")
+    synth_cite = m.get("synth_cite")
+    synth_note = m.get("synth_note")
+    report = m.get("report")
+    report_label = m.get("report_label")
+
+    # Computed values (match JS exactly)
+    tpp = f"{tokens / params:.1f}" if tokens and params else None
+    stpp = (
+        f"{synth_tokens / params:.1f}"
+        if synth_tokens is not None and params
+        else None
+    )
+    synth_pct = (
+        f"{synth_tokens / tokens * 100:.1f}"
+        if synth_tokens is not None and tokens
+        else None
+    )
+
+    # Report link
+    if report:
+        label = escape(report_label) if report_label else "PDF"
+        report_link = (
+            f'<a href="{escape(report, quote=True)}" '
+            f'class="report-link" target="_blank">{label}</a>'
+        )
+    else:
+        report_link = '<span class="tbd">none</span>'
+
+    # Tokens cell
+    if not tokens:
+        tokens_cell = undisclosed
+    elif tokens_cite:
+        tokens_cell = (
+            f'<span class="cite-wrap">{fmt_tokens(tokens)}'
+            f"{_cite_tooltip(tokens_cite)}</span>"
+        )
+    else:
+        tokens_cell = fmt_tokens(tokens)
+
+    # TPP cell
+    tpp_cell = tpp if tpp is not None else "" if tokens else undisclosed
+
+    # Synth tokens cell
+    if not tokens:
+        synth_tokens_cell = undisclosed
+    elif synth_tokens is not None and synth_cite:
+        val = (
+            '<span class="zero">0</span>'
+            if synth_tokens == 0
+            else fmt_tokens(synth_tokens)
+        )
+        synth_tokens_cell = (
+            f'<span class="cite-wrap">{val}'
+            f"{_cite_tooltip(synth_cite)}</span>"
+        )
+    elif synth_tokens == 0:
+        synth_tokens_cell = '<span class="zero">0</span>'
+    elif synth_tokens is not None:
+        synth_tokens_cell = fmt_tokens(synth_tokens)
+    else:
+        synth_tokens_cell = '<span class="tbd">TBD</span>'
+
+    # STPP cell
+    if not tokens:
+        stpp_cell = undisclosed
+    elif synth_tokens == 0:
+        stpp_cell = '<span class="zero">0</span>'
+    elif stpp is not None:
+        stpp_cell = stpp
+    else:
+        stpp_cell = '<span class="tbd">TBD</span>'
+
+    # Synth % cell
+    if not tokens:
+        synth_pct_cell = undisclosed
+    elif synth_tokens == 0:
+        synth_pct_cell = '<span class="zero">0%</span>'
+    elif synth_pct is not None:
+        synth_pct_cell = f'<span class="bar-cell">{synth_pct}%</span>'
+    else:
+        synth_pct_cell = '<span class="tbd">TBD</span>'
+
+    # Active params always shows the number
+    active_cell = fmt(active)
+
+    # synth_note title attribute (only when no synth_cite)
+    synth_title = ""
+    if synth_note and not synth_cite:
+        synth_title = f' title="{escape(synth_note, quote=True)}"'
+
+    name_html = escape(m["name"])
+    url_html = escape(m["url"], quote=True)
+    org_html = escape(m["org"])
+    date_html = escape(str(m["date"]))
+
+    return (
+        "<tr>\n"
+        f'      <td><a href="{url_html}" target="_blank">{name_html}</a></td>\n'
+        f"      <td>{report_link}</td>\n"
+        f"      <td>{org_html}</td>\n"
+        f"      <td>{date_html}</td>\n"
+        f"      <td>{arch_badge(m['arch'])}</td>\n"
+        f'      <td class="num">{fmt(params)}</td>\n'
+        f'      <td class="num">{active_cell}</td>\n'
+        f'      <td class="num">{tokens_cell}</td>\n'
+        f'      <td class="num">{tpp_cell}</td>\n'
+        f'      <td class="num"{synth_title}>{synth_tokens_cell}</td>\n'
+        f'      <td class="num"{synth_title}>{stpp_cell}</td>\n'
+        f'      <td class="num"{synth_title}>{synth_pct_cell}</td>\n'
+        "    </tr>"
+    )
+
+
+def render_table_rows(models):
+    """Render all rows, sorted by date ascending (matches JS initial render)."""
+    sorted_models = sorted(
+        models,
+        key=lambda m: (m.get("date") is None, m.get("date", "")),
+    )
+    return "\n".join(render_row(m) for m in sorted_models)
 
 
 def build():
@@ -42,7 +224,9 @@ def build():
     build_date_iso = today.isoformat()
     model_json = json.dumps(models, indent=2, ensure_ascii=False)
     authors_json = json.dumps(authors, indent=2, ensure_ascii=False)
-    html = template.replace("%%MODEL_DATA%%", model_json)
+    table_rows = render_table_rows(models)
+    html = template.replace("%%TABLE_ROWS%%", table_rows)
+    html = html.replace("%%MODEL_DATA%%", model_json)
     html = html.replace("%%AUTHOR_DATA%%", authors_json)
     html = html.replace("%%BUILD_DATE%%", build_date)
     html = html.replace("%%BUILD_DATE_ISO%%", build_date_iso)
