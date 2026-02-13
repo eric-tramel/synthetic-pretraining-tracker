@@ -68,6 +68,7 @@ def build():
 
     # Data exports
     shutil.copy(MODELS_DATA, SITE / "data" / "models.yaml")
+    shutil.copy(AUTHORS_DATA, SITE / "data" / "authors.yaml")
     (SITE / "data" / "models.json").write_text(
         json.dumps(models, indent=2, ensure_ascii=False) + "\n"
     )
@@ -79,6 +80,7 @@ def build():
 > {BASE_URL}/
 > {BASE_URL}/data/models.json
 > {BASE_URL}/data/models.yaml
+> {BASE_URL}/data/authors.yaml
 > {REPO_URL}
 
 ## Fields
