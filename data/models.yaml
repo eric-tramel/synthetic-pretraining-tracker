@@ -105,8 +105,8 @@
   active: 72
   tokens: 18000
   tokens_cite:
-    quote: "All models are pretrained on our latest large-scale dataset, encompassing up to 18 trillion tokens."
-    source: "arXiv 2412.15115"
+    quote: "In terms of pre-training, we have scaled the high-quality pre-training datasets from the previous 7 trillion tokens to 18 trillion tokens."
+    source: "arXiv 2412.15115, Section 6 Conclusion"
     url: "https://arxiv.org/abs/2412.15115"
   synth_tokens: null
   synth_cite: null
@@ -267,7 +267,7 @@
   active: 14
   tokens: 4800
   tokens_cite:
-    quote: "We also provide some initial parameter-scaling results with a 7B and 14B models trained for 4.8T tokens, called phi-3-small and phi-3-medium."
+    quote: "We also provide parameter-scaling results with a 7B, 14B models trained for 4.8T tokens, called phi-3-small, phi-3-medium..."
     source: "arXiv 2404.14219, Abstract"
     url: "https://arxiv.org/abs/2404.14219"
   synth_tokens: null
@@ -290,7 +290,7 @@
     url: "https://arxiv.org/abs/2412.08905"
   synth_tokens: 5500
   synth_cite:
-    quote: "Synthetic data constitutes the bulk of the training data for phi-4. Data mixture: Synthetic 40%, Web rewrites 15%, Filtered web data 15%, Code data 20%, Acquired sources 10%."
+    quote: "Web 15% 1.3T 1.2 Web rewrites 15% 290B 5.2 Synthetic 40% 290B 13.8 Code data 20% 820B 2.4 Acquired sources 10% 580B 1.7"
     source: "arXiv 2412.08905, \xA73 Table 5"
     url: "https://arxiv.org/abs/2412.08905"
   synth_note: "40% synthetic + 15% web rewrites = 55% of 10T = 5.5T"
@@ -442,14 +442,14 @@
   arch: "moe"
   params: 456
   active: 45.9
-  tokens: 12000
+  tokens: 11400
   tokens_cite:
-    quote: "Trained on ~12 trillion tokens."
-    source: "AnalyticsVidhya (citing arXiv 2501.08313)"
-    url: "https://arxiv.org/abs/2501.08313"
+    quote: "Our training approach involved large-scale pre-training on 11.4 trillion tokens, followed by a three-stage process to extend the context window up to 1 million tokens."
+    source: "MiniMax official presentation"
+    url: "https://qxscwp9kll.space.minimax.io/"
   synth_tokens: null
   synth_cite: null
-  synth_note: "~12T tokens per secondary sources. 4x repetition of high-quality data mentioned but synthetic proportion not disclosed."
+  synth_note: "Official presentation reports 11.4T pretraining tokens. Synthetic proportion not disclosed."
 
 - name: "Kimi K2.5"
   url: "https://huggingface.co/moonshotai/Kimi-K2.5"
@@ -462,7 +462,7 @@
   active: 32
   tokens: 30500
   tokens_cite:
-    quote: "Built through continual pretraining on approximately 15 trillion mixed visual and text tokens atop Kimi-K2-Base."
+    quote: "Kimi K2.5 builds on Kimi K2 with continued pretraining over approximately 15T mixed visual and text tokens."
     source: "Kimi K2.5 Tech Blog + K2 report (15.5T base + 15T CPT)"
     url: "https://www.kimi.com/blog/kimi-k2-5.html"
   synth_tokens: null
@@ -480,8 +480,8 @@
   active: 40
   tokens: 28500
   tokens_cite:
-    quote: "Pre-training data growing from 23T to 28.5T tokens. GLM-5 employs a MoE architecture, scaling from GLM-4.5's 355B params to 744B, with 256 experts, 8 activated per token."
-    source: "GLM-5 release coverage (Feb 2026)"
+    quote: "Compared to GLM-4.5, GLM-5 scales from 355B parameters (32B active) to 744B parameters (40B active), and increases pre-training data from 23T to 28.5T tokens."
+    source: "GLM-5 HF Model Card"
     url: "https://huggingface.co/zai-org/GLM-5"
   synth_tokens: null
   synth_cite: null
@@ -516,7 +516,7 @@
   active: 1
   tokens: 10000
   tokens_cite:
-    quote: "Trained on 10T tokens, organized into three phases with progressively higher quality and STEM concentration: 7T in phase 1, 1.8T in phase 2, 1.2T in phase 3."
+    quote: "Trinity Nano and Mini train on 10T tokens, organized into three phases with progressively higher quality and STEM concentration: 7T tokens in phase 1, 1.8T tokens in phase 2, and 1.2T tokens in phase 3."
     source: "Arcee Blog: The Trinity Manifesto"
     url: "https://www.arcee.ai/blog/the-trinity-manifesto"
   synth_tokens: null
@@ -534,7 +534,7 @@
   active: 3
   tokens: 10000
   tokens_cite:
-    quote: "Trained on 10T tokens, organized into three phases with progressively higher quality and STEM concentration: 7T in phase 1, 1.8T in phase 2, 1.2T in phase 3."
+    quote: "Trinity Nano and Mini train on 10T tokens, organized into three phases with progressively higher quality and STEM concentration: 7T tokens in phase 1, 1.8T tokens in phase 2, and 1.2T tokens in phase 3."
     source: "Arcee Blog: The Trinity Manifesto"
     url: "https://www.arcee.ai/blog/the-trinity-manifesto"
   synth_tokens: null
@@ -552,15 +552,15 @@
   active: 13
   tokens: 17000
   tokens_cite:
-    quote: "Trinity Large was pre-trained on 17 trillion tokens of data curated by DatologyAI, split across three phases of 10T, 4T, and 3T tokens."
+    quote: "Trinity Large was trained on 17T tokens of data curated by DatologyAI, split across three phases of 10T, 4T, and 3T tokens."
     source: "Arcee Blog: Trinity Large"
     url: "https://www.arcee.ai/blog/trinity-large"
   synth_tokens: 8000
   synth_cite:
-    quote: "Over 8 trillion tokens of synthetic data were generated for this dataset across web, code, math, reasoning, and multilingual domains. The 8T synthetic tokens include 6.5T synthetic web tokens, 1T multilingual tokens, and 800B synthetic code tokens."
+    quote: "Notably, over 8 trillion tokens of synthetic data were generated for this dataset across web, code, math, reasoning, and multilingual domains, using a breadth of state-of-the-art rephrasing approaches."
     source: "Arcee Blog: Trinity Large"
     url: "https://www.arcee.ai/blog/trinity-large"
-  synth_note: "6.5T web rephrasing + 1T multilingual + 0.8T code"
+  synth_note: "Source explicitly says the training dataset includes over 8T synthetic tokens; exact total beyond that lower bound is not pinned in the cited page."
 
 - name: "Grok-1"
   url: "https://huggingface.co/xai-org/grok-1"
@@ -588,7 +588,7 @@
   active: 10
   tokens: 16000
   tokens_cite:
-    quote: "We conducted a single large-scale pretraining run on the 7B model...leveraging 14 trillion tokens featuring web, code, STEM, and curated high-quality and multilingual data. [Then] upscaled the 7B model to a 10B parameters model...continuing pre-training with 2 trillion tokens."
+    quote: "We conducted a single large-scale pretraining run on the 7B model, using 1024 H100 GPU chips, leveraging 14 trillion tokens featuring web, code, STEM, and curated high-quality and multilingual data. Depth up-scaling for improved reasoning: Building on recent studies on the effects of model depth, we upscaled the 7B model to a 10B parameters model by duplicating the redundant layers and continuing pre-training with 2 trillion tokens of high-quality data."
     source: "HF Blog: Falcon 3"
     url: "https://huggingface.co/blog/falcon3"
   synth_tokens: null
@@ -680,10 +680,10 @@
     url: "https://huggingface.co/PleIAs/Monad"
   synth_tokens: 200
   synth_cite:
-    quote: "Full synthetic training makes relatively straightforward to expand language support. Trained exclusively on SYNTH, a fully open generalist synthetic dataset built from 50,000 Wikipedia vital articles as seeds."
-    source: "SYNTH Blog: The New Data Frontier"
-    url: "https://huggingface.co/blog/Pclanglais/synth-data-frontier"
-  synth_note: "100% synthetic — trained exclusively on SYNTH dataset (encyclopedic amplification, reasoning traces, arithmetic, RAG, creative writing)"
+    quote: "While the final training data is fully synthetic, it relied on seeds collected from three data sources:"
+    source: "SYNTH dataset card"
+    url: "https://huggingface.co/datasets/PleIAs/SYNTH"
+  synth_note: "100% synthetic — model card says Monad is trained on SYNTH, and the SYNTH dataset card says the final training data is fully synthetic."
 
 - name: "Baguettotron"
   url: "https://huggingface.co/PleIAs/Baguettotron"
@@ -701,7 +701,7 @@
     url: "https://huggingface.co/PleIAs/Baguettotron"
   synth_tokens: 200
   synth_cite:
-    quote: "Full synthetic training makes relatively straightforward to expand language support. Trained exclusively on SYNTH, a fully open generalist synthetic dataset built from 50,000 Wikipedia vital articles as seeds."
-    source: "SYNTH Blog: The New Data Frontier"
-    url: "https://huggingface.co/blog/Pclanglais/synth-data-frontier"
-  synth_note: "100% synthetic — trained exclusively on SYNTH dataset (encyclopedic amplification, reasoning traces, arithmetic, RAG, creative writing)"
+    quote: "While the final training data is fully synthetic, it relied on seeds collected from three data sources:"
+    source: "SYNTH dataset card"
+    url: "https://huggingface.co/datasets/PleIAs/SYNTH"
+  synth_note: "100% synthetic — model card says Baguettotron is trained on SYNTH, and the SYNTH dataset card says the final training data is fully synthetic."
