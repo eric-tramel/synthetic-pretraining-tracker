@@ -705,3 +705,225 @@
     source: "SYNTH dataset card"
     url: "https://huggingface.co/datasets/PleIAs/SYNTH"
   synth_note: "100% synthetic — model card says Baguettotron is trained on SYNTH, and the SYNTH dataset card says the final training data is fully synthetic."
+
+- name: "Sarvam 30B"
+  url: "https://huggingface.co/sarvamai/sarvam-30b"
+  report: "https://www.sarvam.ai/blogs/sarvam-30b-105b"
+  report_label: "blog"
+  org: "Sarvam AI"
+  date: "2026-03"
+  arch: "moe"
+  params: 30
+  active: 2.4
+  tokens: 16000
+  tokens_cite:
+    quote: "Our 30B and 105B models were trained on large datasets, with 16T tokens for the 30B and 12T tokens for the 105B."
+    source: "Sarvam AI launch blog, Pre-training"
+    url: "https://www.sarvam.ai/blogs/sarvam-30b-105b"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Official launch blog says Sarvam built data curation and synthesis pipelines across training, but does not quantify synthetic pretraining data."
+
+- name: "Sarvam 105B"
+  url: "https://huggingface.co/sarvamai/sarvam-105b"
+  report: "https://www.sarvam.ai/blogs/sarvam-30b-105b"
+  report_label: "blog"
+  org: "Sarvam AI"
+  date: "2026-03"
+  arch: "moe"
+  params: 105
+  active: 10.3
+  tokens: 12000
+  tokens_cite:
+    quote: "Our 30B and 105B models were trained on large datasets, with 16T tokens for the 30B and 12T tokens for the 105B."
+    source: "Sarvam AI launch blog, Pre-training"
+    url: "https://www.sarvam.ai/blogs/sarvam-30b-105b"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Official launch blog says Sarvam built data curation and synthesis pipelines across training, but does not quantify synthetic pretraining data."
+
+- name: "NVIDIA Nemotron 3 Super"
+  url: "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-Base-BF16"
+  report: "https://arxiv.org/pdf/2604.12374"
+  report_label: null
+  org: "NVIDIA"
+  date: "2026-03"
+  arch: "hybrid"
+  params: 120
+  active: 12
+  tokens: 25000
+  tokens_cite:
+    quote: "We pre-trained Nemotron 3 Super on 25 trillion tokens, focusing on a diverse data mixture and introducing targeted synthetic datasets."
+    source: "arXiv 2604.12374, Abstract"
+    url: "https://arxiv.org/abs/2604.12374"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Technical report describes targeted synthetic datasets, including code concepts and multiple-choice questions, but does not disclose an aggregate synthetic token count."
+
+- name: "NVIDIA Nemotron 3 Ultra"
+  url: "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-Base-BF16"
+  report: "https://arxiv.org/pdf/2606.15007"
+  report_label: null
+  org: "NVIDIA"
+  date: "2026-06"
+  arch: "hybrid"
+  params: 550
+  active: 55
+  tokens: 20000
+  tokens_cite:
+    quote: "Nemotron 3 Ultra was pre-trained on 20 trillion text tokens with an emphasis on reasoning, agentic, and coding data."
+    source: "arXiv 2606.15007, Conclusion"
+    url: "https://arxiv.org/abs/2606.15007"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Technical report identifies synthetic web-crawl and specialized data among the pretraining sources, but does not disclose an aggregate synthetic token count."
+
+- name: "Gemma 4 31B"
+  url: "https://huggingface.co/google/gemma-4-31B"
+  report: "https://arxiv.org/pdf/2607.02770"
+  report_label: null
+  org: "Google"
+  date: "2026-04"
+  arch: "dense"
+  params: 31
+  active: 31
+  tokens: null
+  tokens_cite: null
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Technical report describes the pretraining modalities and data sources, but discloses neither the total token count nor a synthetic-data amount."
+
+- name: "Gemma 4 26B-A4B"
+  url: "https://huggingface.co/google/gemma-4-26B-A4B"
+  report: "https://arxiv.org/pdf/2607.02770"
+  report_label: null
+  org: "Google"
+  date: "2026-04"
+  arch: "moe"
+  params: 26
+  active: 3.8
+  tokens: null
+  tokens_cite: null
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Technical report describes the pretraining modalities and data sources, but discloses neither the total token count nor a synthetic-data amount."
+
+- name: "DeepSeek-V4-Flash"
+  url: "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Base"
+  report: "https://arxiv.org/pdf/2606.19348"
+  report_label: null
+  org: "DeepSeek"
+  date: "2026-04"
+  arch: "moe"
+  params: 284
+  active: 13
+  tokens: 32000
+  tokens_cite:
+    quote: "During pre-training, we train DeepSeek-V4-Flash on 32T tokens and DeepSeek-V4-Pro on 33T tokens, respectively."
+    source: "arXiv 2606.19348, Pre-Training"
+    url: "https://arxiv.org/abs/2606.19348"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Technical report describes filtering auto-generated and templated web content, but does not disclose whether retained pretraining data includes synthetic content or in what amount."
+
+- name: "DeepSeek-V4-Pro"
+  url: "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-Base"
+  report: "https://arxiv.org/pdf/2606.19348"
+  report_label: null
+  org: "DeepSeek"
+  date: "2026-04"
+  arch: "moe"
+  params: 1600
+  active: 49
+  tokens: 33000
+  tokens_cite:
+    quote: "During pre-training, we train DeepSeek-V4-Flash on 32T tokens and DeepSeek-V4-Pro on 33T tokens, respectively."
+    source: "arXiv 2606.19348, Pre-Training"
+    url: "https://arxiv.org/abs/2606.19348"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Technical report describes filtering auto-generated and templated web content, but does not disclose whether retained pretraining data includes synthetic content or in what amount."
+
+- name: "MiMo-V2.5"
+  url: "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Base"
+  report: "https://huggingface.co/XiaomiMiMo/MiMo-V2.5"
+  report_label: "HF"
+  org: "Xiaomi"
+  date: "2026-04"
+  arch: "moe"
+  params: 310
+  active: 15
+  tokens: 48000
+  tokens_cite:
+    quote: "MiMo-V2.5 is trained on a total of ~48T tokens."
+    source: "MiMo-V2.5 official model card, Training Process"
+    url: "https://huggingface.co/XiaomiMiMo/MiMo-V2.5"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Official model card does not quantify synthetic pretraining data. The MiMo-V2-Flash report covers an earlier 27T-token model and is not used as evidence for this row."
+
+- name: "MiMo-V2.5-Pro"
+  url: "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Pro-Base"
+  report: "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Pro-Base"
+  report_label: "HF"
+  org: "Xiaomi"
+  date: "2026-04"
+  arch: "moe"
+  params: 1020
+  active: 42
+  tokens: 27000
+  tokens_cite:
+    quote: "Efficient Pre-Training: Trained on 27T tokens using FP8 mixed precision and native 32k seq length."
+    source: "MiMo-V2.5-Pro official model card"
+    url: "https://huggingface.co/XiaomiMiMo/MiMo-V2.5-Pro-Base"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Official model card does not quantify synthetic pretraining data."
+
+- name: "Granite 4.1 30B"
+  url: "https://huggingface.co/ibm-granite/granite-4.1-30b-base"
+  report: "https://huggingface.co/blog/ibm-granite/granite-4-1"
+  report_label: "blog"
+  org: "IBM"
+  date: "2026-04"
+  arch: "dense"
+  params: 30
+  active: 30
+  tokens: 15000
+  tokens_cite:
+    quote: "Granite 4.1 is trained from scratch on approximately 15 trillion tokens using a five-phase training strategy."
+    source: "IBM Granite technical walkthrough, Pre-Training"
+    url: "https://huggingface.co/blog/ibm-granite/granite-4-1"
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "IBM's technical walkthrough reports ~9% synthetic data in a 2T phase and ~8.5% in another 2T phase. It does not directly quote an aggregate synthetic token count, so this field remains undisclosed."
+
+- name: "GLM-5.2"
+  url: "https://huggingface.co/zai-org/GLM-5.2"
+  report: "https://arxiv.org/pdf/2602.15763"
+  report_label: null
+  org: "Zhipu AI"
+  date: "2026-06"
+  arch: "moe"
+  params: 744
+  active: 40
+  tokens: null
+  tokens_cite: null
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "Official GLM-5.2 card cites the GLM-5 report, which documents 28.5T base-model tokens and synthetic mid-training data, but does not separately state that GLM-5.2 uses the identical base checkpoint or quantify its synthetic share."
+
+- name: "MiniMax-M3"
+  url: "https://huggingface.co/MiniMaxAI/MiniMax-M3"
+  report: "https://arxiv.org/pdf/2606.13392"
+  report_label: null
+  org: "MiniMax"
+  date: "2026-06"
+  arch: "moe"
+  params: 428
+  active: 23
+  tokens: null
+  tokens_cite: null
+  synth_tokens: null
+  synth_cite: null
+  synth_note: "The linked sparse-attention paper evaluates a 109B/6B-active proxy on 3T tokens; it does not disclose MiniMax-M3's pretraining token total or synthetic-data amount."
