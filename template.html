@@ -330,6 +330,12 @@
     color: var(--text-muted);
   }
 
+  .cite-tooltip .cite-note {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    margin-bottom: 0.4rem;
+  }
+
   .cite-tooltip .cite-source a {
     color: var(--accent);
     font-size: 0.7rem;
@@ -435,6 +441,7 @@
     TPP = (Total Training Tokens) / (Total Parameters). Higher TPP = more data per parameter of model capacity.<br>
     STPP = (Synthetic Training Tokens) / (Total Parameters). Measures synthetic data investment normalized by model size.<br>
     Synth % = Synthetic tokens as fraction of total training tokens.<br>
+    ≥ marks a conservative lower bound calculated from explicitly reported mixture weights.<br>
     For MoE models, "Active Params" shows params activated per token. TPP/STPP use Total Params as denominator.<br>
     "TBD" = needs extraction from technical report. Blank = not disclosed or not applicable.<br>
     DeepSeek-R1 excluded (post-trained from V3, no new pretraining). QwQ excluded (post-trained from Qwen 2.5).
@@ -467,6 +474,21 @@ function fmtPct(synth, total) {
   return (synth / total * 100).toFixed(1) + '%';
 }
 
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[char]);
+}
+
+function safeURL(value) {
+  try {
+    const url = new URL(String(value), window.location.href);
+    return ['http:', 'https:'].includes(url.protocol) ? escapeHTML(url.href) : '#';
+  } catch {
+    return '#';
+  }
+}
+
 function archBadge(arch) {
   const cls = arch === 'dense' ? 'arch-dense' : arch === 'moe' ? 'arch-moe' : 'arch-hybrid';
   const label = arch === 'dense' ? 'Dense' : arch === 'moe' ? 'MoE' : 'Hybrid';
@@ -481,6 +503,7 @@ function renderTable(data) {
     const tpp = (m.tokens && m.params) ? (m.tokens / m.params).toFixed(1) : null;
     const stpp = (m.synth_tokens !== null && m.synth_tokens !== undefined && m.params) ? (m.synth_tokens / m.params).toFixed(1) : null;
     const synthPct = (m.synth_tokens !== null && m.synth_tokens !== undefined && m.tokens) ? (m.synth_tokens / m.tokens * 100).toFixed(1) : null;
+    const synthPrefix = m.synth_relation === 'lower_bound' ? '≥' : '';
 
     const reportLink = m.report
       ? `<a href="${m.report}" class="report-link" target="_blank">${m.report_label || 'PDF'}</a>`
@@ -493,8 +516,7 @@ function renderTable(data) {
     if (!m.tokens) {
       tokensCell = undisclosed;
     } else if (m.tokens_cite) {
-      const q = m.tokens_cite.quote.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-      tokensCell = `<span class="cite-wrap">${fmtTokens(m.tokens)}<div class="cite-tooltip"><div class="cite-quote">${m.tokens_cite.quote}</div><div class="cite-source"><a href="${m.tokens_cite.url}" target="_blank">${m.tokens_cite.source}</a></div></div></span>`;
+      tokensCell = `<span class="cite-wrap">${fmtTokens(m.tokens)}<div class="cite-tooltip"><div class="cite-quote">${escapeHTML(m.tokens_cite.quote)}</div><div class="cite-source"><a href="${safeURL(m.tokens_cite.url)}" target="_blank">${escapeHTML(m.tokens_cite.source)}</a></div></div></span>`;
     } else {
       tokensCell = fmtTokens(m.tokens);
     }
@@ -504,12 +526,14 @@ function renderTable(data) {
     if (!m.tokens) {
       synthTokensCell = undisclosed;
     } else if (m.synth_tokens !== null && m.synth_tokens !== undefined && m.synth_cite) {
-      const val = m.synth_tokens === 0 ? '<span class="zero">0</span>' : fmtTokens(m.synth_tokens);
-      synthTokensCell = `<span class="cite-wrap">${val}<div class="cite-tooltip"><div class="cite-quote">${m.synth_cite.quote}</div><div class="cite-source"><a href="${m.synth_cite.url}" target="_blank">${m.synth_cite.source}</a></div></div></span>`;
+      const val = m.synth_tokens === 0 ? '<span class="zero">0</span>' : synthPrefix + fmtTokens(m.synth_tokens);
+      const note = m.synth_note ? `<div class="cite-note">${escapeHTML(m.synth_note)}</div>` : '';
+      const supporting = (m.synth_cite.supporting_sources || []).map(item => `<div class="cite-source"><a href="${safeURL(item.url)}" target="_blank">${escapeHTML(item.source)}</a></div>`).join('');
+      synthTokensCell = `<span class="cite-wrap">${val}<div class="cite-tooltip"><div class="cite-quote">${escapeHTML(m.synth_cite.quote)}</div>${note}<div class="cite-source"><a href="${safeURL(m.synth_cite.url)}" target="_blank">${escapeHTML(m.synth_cite.source)}</a></div>${supporting}</div></span>`;
     } else if (m.synth_tokens === 0) {
       synthTokensCell = '<span class="zero">0</span>';
     } else if (m.synth_tokens !== null && m.synth_tokens !== undefined) {
-      synthTokensCell = fmtTokens(m.synth_tokens);
+      synthTokensCell = synthPrefix + fmtTokens(m.synth_tokens);
     } else {
       synthTokensCell = '<span class="tbd">TBD</span>';
     }
@@ -520,7 +544,7 @@ function renderTable(data) {
     } else if (m.synth_tokens === 0) {
       stppCell = '<span class="zero">0</span>';
     } else if (stpp !== null) {
-      stppCell = stpp;
+      stppCell = synthPrefix + stpp;
     } else {
       stppCell = '<span class="tbd">TBD</span>';
     }
@@ -531,7 +555,7 @@ function renderTable(data) {
     } else if (m.synth_tokens === 0) {
       synthPctCell = '<span class="zero">0%</span>';
     } else if (synthPct !== null) {
-      synthPctCell = `<span class="bar-cell">${synthPct}%</span>`;
+      synthPctCell = `<span class="bar-cell">${synthPrefix}${synthPct}%</span>`;
     } else {
       synthPctCell = '<span class="tbd">TBD</span>';
     }

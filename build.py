@@ -10,6 +10,7 @@ import yaml
 from datetime import date
 from html import escape
 from pathlib import Path
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).parent
 MODELS_DATA = ROOT / "data" / "models.yaml"
@@ -57,17 +58,46 @@ def arch_badge(arch):
     return f'<span class="arch-badge {cls}">{label}</span>'
 
 
-def _cite_tooltip(cite):
+def safe_url(value):
+    """Allow only HTTP(S) links in citation tooltips."""
+    url = str(value)
+    return url if urlparse(url).scheme in {"http", "https"} else "#"
+
+
+def json_for_script(value):
+    """Serialize data without allowing an embedded value to close a script tag."""
+    return json.dumps(value, indent=2, ensure_ascii=False).translate(
+        {
+            ord("&"): r"\u0026",
+            ord("<"): r"\u003c",
+            ord(">"): r"\u003e",
+            0x2028: r"\u2028",
+            0x2029: r"\u2029",
+        }
+    )
+
+
+def _cite_tooltip(cite, note=None):
     """Build a cite-wrap span with tooltip. Used for tokens and synth_tokens."""
     quote_html = escape(cite["quote"])
     source_html = escape(cite["source"])
-    url = escape(cite["url"], quote=True)
+    url = escape(safe_url(cite["url"]), quote=True)
+    note_html = (
+        f'<div class="cite-note">{escape(note)}</div>' if note else ""
+    )
+    supporting_html = "".join(
+        '<div class="cite-source">'
+        f'<a href="{escape(safe_url(item["url"]), quote=True)}" target="_blank">'
+        f'{escape(item["source"])}</a></div>'
+        for item in cite.get("supporting_sources", [])
+    )
     return (
         f'<div class="cite-tooltip">'
         f'<div class="cite-quote">{quote_html}</div>'
+        f"{note_html}"
         f'<div class="cite-source">'
         f'<a href="{url}" target="_blank">{source_html}</a>'
-        f"</div></div>"
+        f"</div>{supporting_html}</div>"
     )
 
 
@@ -79,11 +109,13 @@ def render_row(m):
     params = m.get("params")
     active = m.get("active")
     synth_tokens = m.get("synth_tokens")
+    synth_relation = m.get("synth_relation")
     tokens_cite = m.get("tokens_cite")
     synth_cite = m.get("synth_cite")
     synth_note = m.get("synth_note")
     report = m.get("report")
     report_label = m.get("report_label")
+    synth_prefix = "≥" if synth_relation == "lower_bound" else ""
 
     # Computed values (match JS exactly)
     tpp = f"{tokens / params:.1f}" if tokens and params else None
@@ -129,16 +161,16 @@ def render_row(m):
         val = (
             '<span class="zero">0</span>'
             if synth_tokens == 0
-            else fmt_tokens(synth_tokens)
+            else f"{synth_prefix}{fmt_tokens(synth_tokens)}"
         )
         synth_tokens_cell = (
             f'<span class="cite-wrap">{val}'
-            f"{_cite_tooltip(synth_cite)}</span>"
+            f"{_cite_tooltip(synth_cite, synth_note)}</span>"
         )
     elif synth_tokens == 0:
         synth_tokens_cell = '<span class="zero">0</span>'
     elif synth_tokens is not None:
-        synth_tokens_cell = fmt_tokens(synth_tokens)
+        synth_tokens_cell = f"{synth_prefix}{fmt_tokens(synth_tokens)}"
     else:
         synth_tokens_cell = '<span class="tbd">TBD</span>'
 
@@ -148,7 +180,7 @@ def render_row(m):
     elif synth_tokens == 0:
         stpp_cell = '<span class="zero">0</span>'
     elif stpp is not None:
-        stpp_cell = stpp
+        stpp_cell = f"{synth_prefix}{stpp}"
     else:
         stpp_cell = '<span class="tbd">TBD</span>'
 
@@ -158,7 +190,9 @@ def render_row(m):
     elif synth_tokens == 0:
         synth_pct_cell = '<span class="zero">0%</span>'
     elif synth_pct is not None:
-        synth_pct_cell = f'<span class="bar-cell">{synth_pct}%</span>'
+        synth_pct_cell = (
+            f'<span class="bar-cell">{synth_prefix}{synth_pct}%</span>'
+        )
     else:
         synth_pct_cell = '<span class="tbd">TBD</span>'
 
@@ -222,8 +256,8 @@ def build():
     today = date.today()
     build_date = today.strftime("%B %d, %Y")
     build_date_iso = today.isoformat()
-    model_json = json.dumps(models, indent=2, ensure_ascii=False)
-    authors_json = json.dumps(authors, indent=2, ensure_ascii=False)
+    model_json = json_for_script(models)
+    authors_json = json_for_script(authors)
     table_rows = render_table_rows(models)
     html = template.replace("%%TABLE_ROWS%%", table_rows)
     html = html.replace("%%MODEL_DATA%%", model_json)
@@ -281,6 +315,7 @@ Each model entry contains:
 - tokens: Total pretraining tokens in billions (null if undisclosed)
 - tokens_cite: Direct quote and source for token count
 - synth_tokens: Synthetic pretraining tokens in billions (null if unknown)
+- synth_relation: Optional `lower_bound` marker for a conservative minimum
 - synth_cite: Direct quote and source for synthetic token count
 - synth_note: Brief context on synthetic data status
 """

@@ -11,11 +11,11 @@ Tracking synthetic data usage in open-weight LLM pretraining, from Jan 2024 onwa
 A sortable, cited table of open-weight language models with:
 
 - Total pretraining token counts (with direct quotes from technical reports)
-- Synthetic pretraining token counts where disclosed
+- Synthetic pretraining token counts where disclosed, plus clearly marked conservative lower bounds when explicit mixture weights permit them
 - Tokens-per-parameter (TPP) and synthetic tokens-per-parameter (STPP) ratios
 - Links to model cards and technical reports
 
-Every number has a hover tooltip showing the exact quote and source. If a number isn't publicly confirmed, it says so.
+Every cited number has a hover tooltip showing its source evidence. Derived lower bounds are prefixed with `≥`, and their tooltips show the reported mixture weights, arithmetic, exclusions, and supporting dataset cards. If a number isn't publicly confirmed, it says so.
 
 ## How it works
 
@@ -54,6 +54,7 @@ Contributions are welcome. To add a model or correct data, open a pull request t
    - `tokens` (pretraining tokens, in billions — so 15.6T = 15600)
    - `tokens_cite` with `quote` (direct quote from source), `source` (paper/blog reference), `url`
    - `synth_tokens` (synthetic pretraining tokens in billions, or `null` if unknown)
+   - `synth_relation` (optional; set to `lower_bound` for a conservative minimum)
    - `synth_cite` with quote/source/url if synth_tokens is provided
    - `synth_note` (brief context)
    - `report` (link to tech report PDF or blog) and `report_label` (PDF/blog/paper/github/HF)
@@ -62,7 +63,7 @@ Contributions are welcome. To add a model or correct data, open a pull request t
 
 ### Guidelines
 
-- Every token count must have a direct quote from a primary source (tech report, model card, or official blog post). No estimates or inferences.
+- Every token count must be grounded in a primary source (tech report, model card, or official blog post). Deterministic totals or conservative lower bounds calculated from explicitly reported mixture weights are allowed when the citation and note show the inputs and arithmetic; do not estimate undisclosed mixture shares.
 - If a report doesn't mention synthetic data, set `synth_tokens: null` and explain in `synth_note`. Don't assume zero.
 - Use the existing entries as formatting examples.
 - Run `uv run build.py` locally to verify your changes produce valid output before submitting.
